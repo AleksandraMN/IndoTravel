@@ -1,3 +1,5 @@
+import {getTravelAccordion} from './modules/acc.js';
+import {closeHeaderMenu, openHeaderMenu} from './modules/menu.js';
 import {timer} from './modules/timer.js';
 
 const init = () => {
@@ -12,8 +14,14 @@ const init = () => {
   const heroText = document.querySelector('.hero__text');
   const heroTimer = document.querySelector('.hero__timer');
 
+  const headerMenu = document.querySelector('.header__menu');
+  const headerMenuButton = document.querySelector('.header__menu-button');
+
   timer(timerElement.dataset.timerDeadline, timerCountDays,
       timerCountHours, timerCountMinutes, heroText, heroTimer);
+  getTravelAccordion();
+  openHeaderMenu(headerMenuButton, headerMenu);
+  closeHeaderMenu(headerMenu);
 };
 
 init();
