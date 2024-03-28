@@ -2,6 +2,7 @@ import {getTravelAccordion} from './modules/acc.js';
 import {closeHeaderMenu, openHeaderMenu} from './modules/menu.js';
 import {timer} from './modules/timer.js';
 import {showAirplane} from './modules/fly.js';
+import {renderTravels, reservationForm} from './modules/json.js';
 
 const init = () => {
   // Дедлайн пропишите в data-атрибут data-deadline у элемента с классом timer
@@ -23,6 +24,8 @@ const init = () => {
   openHeaderMenu();
   closeHeaderMenu(headerMenu);
   showAirplane();
+  renderTravels();
+  reservationForm();
 };
 
 init();

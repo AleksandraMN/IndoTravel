@@ -1,6 +1,6 @@
 
 // Слова возле цифр должны склонятся
-const declOfNum = (n, titles, from) =>
+export const declOfNum = (n, titles, from) =>
   ' ' + titles[from ? n % 10 === 1 && n % 100 !== 11 ?
       1 : 2 : n % 10 === 1 && n % 100 !== 11 ?
       0 : n % 10 >= 2 && n % 10 <= 4 && (
