@@ -1,10 +1,14 @@
 
-export const closeHeaderMenu = (headerMenu) => {
-  headerMenu.addEventListener('click', ({target}) => {
-    if (target.classList.contains('header__link')) {
-      headerMenu.classList.remove('header__menu_active');
-    }
-  });
+const closeMenu = ({target}) => {
+  console.log(target);
+  const headerMenu = document.querySelector('.header__menu');
+
+  if (!target.closest('.header__menu-button') &&
+    !target.closest('.header__menu') ||
+    target.classList.contains('header__link')) {
+    headerMenu.classList.remove('header__menu_active');
+    document.removeEventListener('click', closeMenu);
+  }
 };
 
 export const openHeaderMenu = () => {
@@ -30,6 +34,7 @@ export const openHeaderMenu = () => {
         if (progress < 1) {
           requestId = requestAnimationFrame(step);
         }
+        document.addEventListener('click', closeMenu);
       });
     };
     // функция: вначале разгоняется, в конце - замедляется
@@ -45,4 +50,5 @@ export const openHeaderMenu = () => {
     }
   });
 };
+
 

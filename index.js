@@ -1,8 +1,9 @@
 import {getTravelAccordion} from './modules/acc.js';
-import {closeHeaderMenu, openHeaderMenu} from './modules/menu.js';
+import {openHeaderMenu} from './modules/menu.js';
 import {timer} from './modules/timer.js';
 import {showAirplane} from './modules/fly.js';
 import {renderTravels, reservationForm} from './modules/json.js';
+import './modules/menu.js';
 
 const init = () => {
   // Дедлайн пропишите в data-атрибут data-deadline у элемента с классом timer
@@ -16,13 +17,11 @@ const init = () => {
   const heroText = document.querySelector('.hero__text');
   const heroTimer = document.querySelector('.hero__timer');
 
-  const headerMenu = document.querySelector('.header__menu');
 
   timer(timerElement.dataset.timerDeadline, timerCountDays,
       timerCountHours, timerCountMinutes, heroText, heroTimer);
   getTravelAccordion();
   openHeaderMenu();
-  closeHeaderMenu(headerMenu);
   showAirplane();
   renderTravels();
   reservationForm();

@@ -68,9 +68,11 @@ export const reservationForm = async () => {
   const reservationPeople = document.querySelector('#reservation__people');
   const reservationPrice = document.querySelector('.reservation__price');
   const reservationData = document.querySelector('.reservation__data');
+  reservationPrice.textContent = '0 ₽';
 
   // "Дата тура"
   completeDate(data, reservationDate);
+
 
   // "Кол-во Человек"
   reservationDate.addEventListener('change', () => {
@@ -90,7 +92,7 @@ export const reservationForm = async () => {
           ', ' + reservationPeople.value +
           declOfNum(reservationPeople.value, ['людей', 'человека', 'человек']);
           reservationPrice.textContent =
-            Math.round(reservationPeople.value * item.price) + '₽';
+            Math.round(reservationPeople.value * item.price) + ' ₽';
         });
       }
     });
