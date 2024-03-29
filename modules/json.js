@@ -8,6 +8,40 @@ export const loadTravels = async (cb) => {
   return data;
 };
 
+// Дата тура заполнение
+const completeDate = (arr, a) => {
+  const travels = arr.map(element => {
+    const option = document.createElement('option');
+    option.className = 'tour__option';
+    option.value = element.date;
+    option.textContent = option.value;
+    return option;
+  });
+  a.append(...travels);
+};
+
+// удаление старых данных
+const deleteList = (a) => {
+  while (a.childNodes[2]) {
+    a.removeChild(a.childNodes[2]);
+  }
+};
+
+// Кол-во Человек заполнение
+const completePeoples = (data, a, b) => {
+  data.map((item) => {
+    if (item.date === a.value) {
+      for (let i = item['min-people']; i <= item['max-people']; i++) {
+        const option = document.createElement('option');
+        option.className = 'tour__option';
+        option.value = '';
+        option.textContent = i;
+        b.append(option);
+      }
+    }
+  });
+};
+
 // заполнение выпадающих списков на сайте с полями:
 // "Дата тура" и "Кол-во Человек"
 export const renderTravels = async () => {
@@ -16,32 +50,13 @@ export const renderTravels = async () => {
   const tourDate = document.querySelector('#tour__date');
   const tourPeople = document.querySelector('#tour__people');
 
-  // "Дата тура"
-  const travels = data.map(item => {
-    const option = document.createElement('option');
-    option.className = 'tour__option';
-    option.value = item.date;
-    option.textContent = option.value;
-    return option;
-  });
-  tourDate.append(...travels);
+  // "Дата тура" заполнение
+  completeDate(data, tourDate);
 
-  // "Кол-во Человек"
+  // "Кол-во Человек" заполнение
   tourDate.addEventListener('change', () => {
-    while (tourPeople.firstChild) { // удаление старых данных
-      tourPeople.removeChild(tourPeople.firstChild);
-    }
-    data.map((item) => {
-      if (item.date === tourDate.value) {
-        for (let i = item['min-people']; i <= item['max-people']; i++) {
-          const option = document.createElement('option');
-          option.className = 'tour__option';
-          option.value = '';
-          option.textContent = i;
-          tourPeople.append(option);
-        }
-      }
-    });
+    deleteList(tourPeople);
+    completePeoples(data, tourDate, tourPeople);
   });
 };
 
@@ -55,21 +70,12 @@ export const reservationForm = async () => {
   const reservationData = document.querySelector('.reservation__data');
 
   // "Дата тура"
-  const travels = data.map(item => {
-    const option = document.createElement('option');
-    option.classList.add('tour__option', 'reservation__option');
-    option.value = item.date;
-    option.textContent = option.value;
-    return option;
-  });
-  reservationDate.append(...travels);
-
+  completeDate(data, reservationDate);
 
   // "Кол-во Человек"
   reservationDate.addEventListener('change', () => {
-    while (reservationPeople.firstChild) { // удаление старых данных
-      reservationPeople.removeChild(reservationPeople.firstChild);
-    }
+    deleteList(reservationPeople);
+
     data.map((item) => {
       if (item.date === reservationDate.value) {
         for (let i = item['min-people']; i <= item['max-people']; i++) {
