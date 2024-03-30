@@ -4,6 +4,8 @@ import {timer} from './modules/timer.js';
 import {showAirplane} from './modules/fly.js';
 import {renderTravels, reservationForm} from './modules/json.js';
 import './modules/menu.js';
+import './modules/requests.js';
+
 
 const init = () => {
   // Дедлайн пропишите в data-атрибут data-deadline у элемента с классом timer

@@ -1,4 +1,6 @@
+
 import {declOfNum} from './timer.js';
+
 
 //  получения данных из json файла
 export const loadTravels = async (cb) => {
@@ -60,9 +62,11 @@ export const renderTravels = async () => {
   });
 };
 
+
 // В форме "Бронирование тура" при выборе даты и количества человек
 // выводится информация о датах и общая стоимость
-export const reservationForm = async () => {
+export const reservationForm = async (
+    reservationFormElement) => {
   const data = await loadTravels();
   const reservationDate = document.querySelector('#reservation__date');
   const reservationPeople = document.querySelector('#reservation__people');
@@ -72,7 +76,6 @@ export const reservationForm = async () => {
 
   // "Дата тура"
   completeDate(data, reservationDate);
-
 
   // "Кол-во Человек"
   reservationDate.addEventListener('change', () => {
