@@ -73,6 +73,7 @@ export const reservationForm = async (
   const reservationPrice = document.querySelector('.reservation__price');
   const reservationData = document.querySelector('.reservation__data');
   reservationPrice.textContent = '0 ₽';
+  reservationData.textContent = 'Дата путешествия, количество человек';
 
   // "Дата тура"
   completeDate(data, reservationDate);

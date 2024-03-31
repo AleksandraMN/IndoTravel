@@ -9,6 +9,7 @@ const reservationPeople = document.querySelector('#reservation__people');
 const footerForm = document.querySelector('.footer__form');
 const footerInput = document.querySelector('.footer__input');
 const footerInputWrap = document.querySelector('.footer__input-wrap');
+const h2 = document.querySelector('.reservation__title');
 
 const fetchRequest = async (url, {
   method = 'get',
@@ -46,9 +47,9 @@ reservationFormElement.addEventListener('submit', (e) => {
       name: reservationName.value,
       phone: reservationPhone.value,
       price: reservationPrice.textContent,
+      userId: Math.random().toString().substring(2, 4),
     },
     callback(err, data) {
-      const h2 = document.querySelector('.reservation__title');
       if (err) {
         h2.textContent = err;
         h2.style.color = 'red';
@@ -57,8 +58,7 @@ reservationFormElement.addEventListener('submit', (e) => {
       }
       h2.style.color = 'green';
       h2.textContent = `Ваша заявка успешно отправлена,` +
-      ` номер заказа - ${data.id}. Наши менеджеры свяжутся` +
-      ` с вами в течение 3-х рабочих дней.`;
+      ` заявка - № ${data.userId}.`;
     },
     headers: {
       'Content-type': 'application/json; charset=UTF-8',
@@ -85,6 +85,7 @@ footerForm.addEventListener('submit', (e) => {
         return;
       }
       h2.textContent = `Ваша заявка успешно отправлена`;
+      h2.style.width = '250px';
       document.querySelector('.footer__text').textContent = '';
       while (footerInputWrap.childNodes[1]) {
         footerInputWrap.removeChild(footerInputWrap.childNodes[1]);
@@ -92,9 +93,10 @@ footerForm.addEventListener('submit', (e) => {
       const p = document.createElement('p');
       p.textContent = `Наши менеджеры свяжутся` +
       ` с вами в течение 3-х рабочих дней.`;
+
       footerInputWrap.append(p);
       footerInputWrap.style.border = '2px solid red';
-      footerInputWrap.style.padding = '15px';
+      footerInputWrap.style.padding = '20px';
       footerInputWrap.style.width = '250px';
     },
     headers: {
