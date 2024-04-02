@@ -19,12 +19,12 @@ const showModal = async (peoples, date, price) => {
   title.classList.add('modal__title');
   title.textContent = 'Подтверждение заявки';
   description.classList.add('modal__text');
-  description.textContent = 'Бронирование путешествия в Индию на ' +
-    peoples + '  чел.';
+  description.textContent = 'Бронирование путешествия в Индию на  ' +
+    peoples + '   чел.';
   dates.classList.add('modal__text');
-  dates.textContent = 'В даты: ' + date;
+  dates.textContent = 'В даты:  ' + date;
   priceEl.classList.add('modal__text');
-  priceEl.textContent = 'Стоимость тура ' + price;
+  priceEl.textContent = 'Стоимость тура  ' + price;
 
   modalButtons.classList.add('modal__button');
   btnConfirm.classList.add('modal__btn', 'modal__btn_confirm');
