@@ -1,3 +1,4 @@
+import showModal from './modal.js';
 
 const reservationFormElement = document.querySelector('.reservation__form');
 
@@ -10,6 +11,7 @@ const footerForm = document.querySelector('.footer__form');
 const footerInput = document.querySelector('.footer__input');
 const footerInputWrap = document.querySelector('.footer__input-wrap');
 const h2 = document.querySelector('.reservation__title');
+const reservationButton = document.querySelector('.reservation__button');
 
 const fetchRequest = async (url, {
   method = 'get',
@@ -26,45 +28,64 @@ const fetchRequest = async (url, {
     const response = await fetch(url, options);
     if (response.ok) {
       const data = await response.json();
-      if (callback) callback(null, data);
+      if (callback) return callback(null, data);
       return;
     }
     throw new Error(`Ошибка ${response.status} ${response.statusText}`);
   } catch (err) {
-    callback(err);
+    return callback(err);
   }
 };
 
 // отправка данных из формы "Бронирование тура"
-reservationFormElement.addEventListener('submit', (e) => {
+reservationFormElement.addEventListener('submit', async (e) => {
   e.preventDefault();
 
-  fetchRequest('https://jsonplaceholder.typicode.com/posts', {
-    method: 'post',
-    body: {
-      date: reservationDate.value,
-      peoples: reservationPeople.value,
-      name: reservationName.value,
-      phone: reservationPhone.value,
-      price: reservationPrice.textContent,
-      userId: Math.random().toString().substring(2, 4),
-    },
-    callback(err, data) {
-      if (err) {
-        h2.textContent = err;
-        h2.style.color = 'red';
-        console.warn(err, data);
-        return;
-      }
-      h2.style.color = 'green';
-      h2.textContent = `Ваша заявка успешно отправлена,` +
-      ` заявка - № ${data.userId}.`;
-    },
-    headers: {
-      'Content-type': 'application/json; charset=UTF-8',
-    },
-  });
-  reservationFormElement.reset();
+  const date = reservationDate.value;
+  const peoples = reservationPeople.value;
+  const price = reservationPrice.textContent;
+
+  if (e.submitter === reservationButton) {
+    const result = showModal(peoples, date, price);
+    console.log(result);
+
+    result
+        .then(res => {
+          console.log(res);
+          if (res === true) {
+            fetchRequest('https://jsonplaceholder.typicode.com/posts', {
+              method: 'post',
+              body: {
+                date: reservationDate.value,
+                peoples: reservationPeople.value,
+                name: reservationName.value,
+                phone: reservationPhone.value,
+                price: reservationPrice.textContent,
+                userId: Math.random().toString().substring(2, 4),
+              },
+              callback(err, obj) {
+                if (err) {
+                  h2.textContent = err;
+                  h2.style.color = 'red';
+                  console.warn(err, obj);
+                  return;
+                }
+                h2.style.color = 'green';
+                h2.textContent = `Ваша заявка успешно отправлена,` +
+                ` заявка - № ${obj.userId}.`;
+                reservationDate.setAttribute('disabled', 'true');
+                reservationPeople.setAttribute('disabled', 'true');
+                reservationName.setAttribute('disabled', 'true');
+                reservationPhone.setAttribute('disabled', 'true');
+                reservationButton.setAttribute('disabled', 'true');
+              },
+              headers: {
+                'Content-type': 'application/json; charset=UTF-8',
+              },
+            });
+          }
+        });
+  }
 });
 
 // отправка данных из формы footer
