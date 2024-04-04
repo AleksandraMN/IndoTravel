@@ -5,6 +5,7 @@ import {showAirplane} from './modules/fly.js';
 import {renderTravels, reservationForm} from './modules/json.js';
 import './modules/menu.js';
 import './modules/requests.js';
+import { sendingForm } from './modules/requests.js';
 
 
 const init = () => {
@@ -19,6 +20,8 @@ const init = () => {
   const heroText = document.querySelector('.hero__text');
   const heroTimer = document.querySelector('.hero__timer');
 
+  const reservationName = document.querySelector('#reservation__name');
+  const reservationPhone = document.querySelector('#reservation__phone');
 
   timer(timerElement.dataset.timerDeadline, timerCountDays,
       timerCountHours, timerCountMinutes, heroText, heroTimer);
@@ -27,6 +30,7 @@ const init = () => {
   showAirplane();
   renderTravels();
   reservationForm();
+  sendingForm(reservationName, reservationPhone);
 };
 
 init();
