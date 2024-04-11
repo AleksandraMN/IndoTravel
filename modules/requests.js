@@ -150,7 +150,7 @@ tourForm.addEventListener('submit', (e) => {
   e.preventDefault();
   const date = tourDate.value;
   const peoples = tourPeople.value;
-  
+  /*
   if (e.submitter === tourButton &&
     tourDate.validity.valid === true &&
     tourPeople.validity.valid === true) {
@@ -193,7 +193,7 @@ tourForm.addEventListener('submit', (e) => {
           }
         });
   }
-
+*/
   footerForm.reset();
 });
 
