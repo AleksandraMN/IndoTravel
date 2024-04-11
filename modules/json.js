@@ -36,7 +36,7 @@ const completePeoples = (data, a, b) => {
       for (let i = item['min-people']; i <= item['max-people']; i++) {
         const option = document.createElement('option');
         option.className = 'tour__option';
-        option.value = '';
+        option.value;
         option.textContent = i;
         b.append(option);
       }

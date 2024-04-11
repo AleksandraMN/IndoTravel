@@ -10,7 +10,8 @@ export const showAirplane = () => {
     height: 50px;
     right: 0px;
     bottom: ${bottom};
-    pointer-events: none;
+    pointer-events: auto;
+    z-index: 10;
     background: url('./img/airplane.svg') center/contain no-repeat;
   `;
 

@@ -1,4 +1,7 @@
+
 import showModal from './modal.js';
+import './maska.js';
+
 
 const reservationFormElement = document.querySelector('.reservation__form');
 
@@ -12,6 +15,11 @@ const footerInput = document.querySelector('.footer__input');
 const footerInputWrap = document.querySelector('.footer__input-wrap');
 const h2 = document.querySelector('.reservation__title');
 const reservationButton = document.querySelector('.reservation__button');
+const footerButton = document.querySelector('.footer__button');
+const tourForm = document.querySelector('.tour__form');
+const tourButton = document.querySelector('.tour__button');
+const tourDate = document.querySelector('#tour__date');
+const tourPeople = document.querySelector('#tour__people');
 
 const fetchRequest = async (url, {
   method = 'get',
@@ -37,18 +45,6 @@ const fetchRequest = async (url, {
   }
 };
 
-// В форме бронирование тураполе ФИО разрешите ввод только кириллицу и пробел
-// в поле Телефон  разрешите ввод только символа + и цифр
-export const sendingForm = (reservationName, reservationPhone) => {
-  reservationName.addEventListener('input', () => {
-    reservationName.value = reservationName.value.replace(/[^а-яё ]/iu, '');
-  });
-  reservationPhone.addEventListener('input', () => {
-    reservationPhone.value = reservationPhone.value.replace(/[^0-9\+]/iu, '');
-  });
-  reservationName.setAttribute('pattern', "([А-ЯЁа-яё ]+[А-ЯЁа-яё ]+[А-ЯЁа-яё ]+( [А-ЯЁа-яё ]+)*){6,40}");
-  reservationName.setAttribute('title', "Иванов Иван Иванович");
-};
 
 // отправка данных из формы "Бронирование тура"
 reservationFormElement.addEventListener('submit', async (e) => {
@@ -58,10 +54,12 @@ reservationFormElement.addEventListener('submit', async (e) => {
   const peoples = reservationPeople.value;
   const price = reservationPrice.textContent;
 
-
-  if (e.submitter === reservationButton) {
+  if (e.submitter === reservationButton &&
+    reservationName.validity.valid === true &&
+    reservationPhone.validity.valid === true &&
+    reservationDate.validity.valid === true &&
+    reservationPeople.validity.valid === true) {
     const result = showModal(peoples, date, price);
-    console.log(result);
 
     result
         .then(res => {
@@ -106,38 +104,96 @@ reservationFormElement.addEventListener('submit', async (e) => {
 footerForm.addEventListener('submit', (e) => {
   e.preventDefault();
 
-  fetchRequest('https://jsonplaceholder.typicode.com/posts', {
-    method: 'post',
-    body: {
-      email: footerInput.value,
-    },
-    callback(err, data) {
-      const h2 = document.querySelector('.footer__form-title');
-      if (err) {
-        console.warn(err, data);
-        h2.textContent = err;
-        h2.style.color = 'red';
-        return;
-      }
-      h2.textContent = `Ваша заявка успешно отправлена`;
-      h2.style.width = '250px';
-      document.querySelector('.footer__text').textContent = '';
-      while (footerInputWrap.childNodes[1]) {
-        footerInputWrap.removeChild(footerInputWrap.childNodes[1]);
-      }
-      const p = document.createElement('p');
-      p.textContent = `Наши менеджеры свяжутся` +
-      ` с вами в течение 3-х рабочих дней.`;
+  if (e.submitter === footerButton &&
+  footerInput.validity.valid === true) {
+    fetchRequest('https://jsonplaceholder.typicode.com/posts', {
+      method: 'post',
+      body: {
+        email: footerInput.value,
+      },
+      callback(err, data) {
+        const h2 = document.querySelector('.footer__form-title');
+        if (err) {
+          console.warn(err, data);
+          h2.textContent = err;
+          h2.style.color = 'red';
+          return;
+        }
+        h2.textContent = `Ваша заявка успешно отправлена`;
+        h2.style.width = '250px';
+        document.querySelector('.footer__text').textContent = '';
+        while (footerInputWrap.childNodes[1]) {
+          footerInputWrap.removeChild(footerInputWrap.childNodes[1]);
+        }
+        const p = document.createElement('p');
+        p.textContent = `Наши менеджеры свяжутся` +
+        ` с вами в течение 3-х рабочих дней.`;
 
-      footerInputWrap.append(p);
-      footerInputWrap.style.border = '2px solid red';
-      footerInputWrap.style.padding = '20px';
-      footerInputWrap.style.width = '250px';
-    },
-    headers: {
-      'Content-type': 'application/json; charset=UTF-8',
-    },
-  });
+        footerInputWrap.append(p);
+        footerInputWrap.style.border = '2px solid red';
+        footerInputWrap.style.padding = '20px';
+        footerInputWrap.style.width = '250px';
+      },
+      headers: {
+        'Content-type': 'application/json; charset=UTF-8',
+      },
+    });
+  }
+
+
+  footerForm.reset();
+});
+
+
+// отправка данных из формы tour
+tourForm.addEventListener('submit', (e) => {
+  e.preventDefault();
+  const date = tourDate.value;
+  const peoples = tourPeople.value;
+  
+  if (e.submitter === tourButton &&
+    tourDate.validity.valid === true &&
+    tourPeople.validity.valid === true) {
+    const result = showModal(peoples, date);
+
+    result
+        .then(res => {
+          console.log(res);
+          if (res === true) {
+            fetchRequest('https://jsonplaceholder.typicode.com/posts', {
+              method: 'post',
+              body: {
+                date: reservationDate.value,
+                peoples: reservationPeople.value,
+                name: reservationName.value,
+                phone: reservationPhone.value,
+                price: reservationPrice.textContent,
+                userId: Math.random().toString().substring(2, 4),
+              },
+              callback(err, obj) {
+                if (err) {
+                  h2.textContent = err;
+                  h2.style.color = 'red';
+                  console.warn(err, obj);
+                  return;
+                }
+                h2.style.color = 'green';
+                h2.textContent = `Ваша заявка успешно отправлена,` +
+                  ` заявка - № ${obj.userId}.`;
+                reservationDate.setAttribute('disabled', 'true');
+                reservationPeople.setAttribute('disabled', 'true');
+                reservationName.setAttribute('disabled', 'true');
+                reservationPhone.setAttribute('disabled', 'true');
+                reservationButton.setAttribute('disabled', 'true');
+              },
+              headers: {
+                'Content-type': 'application/json; charset=UTF-8',
+              },
+            });
+          }
+        });
+  }
+
   footerForm.reset();
 });
 
